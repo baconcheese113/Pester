@@ -1,7 +1,7 @@
 import quotes from "./existentialism";
 import { stripEmojis, stripSpaces, breakIntoMsgChunks } from "./util";
 import horrorQuips from "./horror";
-import MESSAGE_TO_SEND from "./message";
+import getMessage from "./message";
 
 export default class Gateways {
   constructor(client) {
@@ -66,11 +66,11 @@ export default class Gateways {
               return match;
             });
             if (!inList) {
-              await m.send(MESSAGE_TO_SEND);
+              await m.send(getMessage(username));
               console.log(`No match found for ${username}`);
             }
           } catch (err) {
-            console.error(err);
+            console.error(err, `Can't send to ${m.user.username}`);
           }
         }
         msg.reply(horrorQuips[Math.floor(Math.random() * (horrorQuips.length - 1))]);
