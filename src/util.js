@@ -6,7 +6,7 @@ export const stripEmojis = text => {
 };
 
 export const stripSpaces = text => {
-  return text.replace(" ", "");
+  return text.replace(/ /g, "");
 };
 
 // Breaking on linebreaks cause 🤷
