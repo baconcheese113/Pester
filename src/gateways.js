@@ -1,5 +1,5 @@
 import quotes from "./existentialism";
-import { stripEmojis, stripSpaces, breakIntoMsgChunks } from "./util";
+import { stripEmojis, stripSpaces, breakIntoMsgChunks, getDiscriminator } from "./util";
 import horrorQuips from "./horror";
 import getMessage from "./message";
 
@@ -33,7 +33,10 @@ export default class Gateways {
           if (!m.user) return str;
           const username = stripSpaces(stripEmojis(m.user.username.toLowerCase()));
           const inList = cleanList.some(v => {
-            const match = v === username || v === `${username}#${m.user.discriminator}`;
+            const match =
+              v === username ||
+              v === `${username}#${m.user.discriminator}` ||
+              getDiscriminator(v) === m.user.discriminator;
             if (match) console.log(`${v} matched to ${username}`);
             return match;
           });
@@ -61,7 +64,10 @@ export default class Gateways {
             if (!m.user || m.user.bot) continue;
             const username = stripSpaces(stripEmojis(m.user.username.toLowerCase()));
             const inList = cleanList.some(v => {
-              const match = v === username || v === `${username}#${m.user.discriminator}`;
+              const match =
+                v === username ||
+                v === `${username}#${m.user.discriminator}` ||
+                getDiscriminator(v) === m.user.discriminator;
               if (match) console.log(`${v} matched to ${username}`);
               return match;
             });

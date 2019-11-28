@@ -19,3 +19,9 @@ export const breakIntoMsgChunks = (str, maxChunkSize = 1500) => {
     return prev;
   }, []);
 };
+
+export const getDiscriminator = str => {
+  if (!str || typeof str.valueOf() !== "string") return null;
+  const match = str.match(/#\d{4}/);
+  return match && match[0] && match[0].slice(1);
+};
