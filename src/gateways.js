@@ -128,6 +128,35 @@ export default class Gateways {
       }
     });
 
+    this.client.on("message", async msg => {
+      if (msg.content.startsWith("!burp tickletheunverified") && msg.member.hasPermission("ADMINISTRATOR")) {
+
+        let verifiedCount = 0
+        let unverifiedCount = 0
+        // Go through all users 
+        const members = msg.guild.members;
+        for (const [id, m] of members) {
+          try {
+            // If they haven't verified send message
+            if (!m.user || m.user.bot) continue;
+            const username = m.user.username;
+            const isVerified = m.roles.some(role => role.id === '651635493452251146') // specific role id to check for
+            if (!isVerified) {
+              unverifiedCount++
+              await m.send(getMessage(username));
+              console.log(`This user has yet to verify - ${username}`);
+            } else {
+              verifiedCount++
+              console.log(`${username} verified`);
+            }
+          } catch (err) {
+            console.error(err, `Can't send to ${m.user.username}`);
+          }
+        }
+        msg.reply(`${verifiedCount} verified AND ${unverifiedCount} unverified`);
+      }
+    });
+
     this.client.on("messageUpdate", (oldMsg, newMsg) => {
       // if (oldMsg.content !== newMsg.content) {
       //   newMsg.reply(`Lets get it right the first time`);
