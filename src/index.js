@@ -1,7 +1,6 @@
-const Discord = require("discord.js");
+import Discord from 'discord.js'
 const client = new Discord.Client();
-const auth = require("../auth.json");
-// const Gateways = require("./gateways.js");
+import auth from "../auth.json"; 
 import Gateways from "./gateways";
 
 const gateways = new Gateways(client);

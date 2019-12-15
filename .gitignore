@@ -1,5 +1,6 @@
+# deps
 node_modules
-dist
 
+# super secret stuffz
 message.js
 auth.json
