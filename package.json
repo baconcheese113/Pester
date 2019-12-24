@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec npm start",
-    "start": "node --experimental-modules --experimental-json-modules --es-module-specifier-resolution=node --async-stack-traces src"
+    "start": "node --experimental-modules --es-module-specifier-resolution=node --async-stack-traces src"
   },
   "author": "",
   "license": "ISC",
