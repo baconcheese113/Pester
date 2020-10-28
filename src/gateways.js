@@ -21,13 +21,13 @@ export default class Gateways {
         msg.reply(res);
       }
     });
-    this.client.on("message", msg => {
+    this.client.on("message", async msg => {
       if (msg.content.startsWith("!burp whosnot ") && msg.member.hasPermission("ADMINISTRATOR")) {
         const rawListStr = msg.content.split("!burp whosnot ")[1];
         const rawList = rawListStr.split("\n");
         const cleanList = rawList.map(v => stripSpaces(stripEmojis(v.toLowerCase())));
 
-        const members = msg.guild.members;
+        const members = await msg.guild.members.fetch();
         console.log(`searching through ${members.array().length} members`);
         const membersStr = members.reduce((str, m) => {
           if (!m.user) return str;
@@ -57,7 +57,7 @@ export default class Gateways {
         const rawList = rawListStr.split("\n");
         const cleanList = rawList.map(v => stripSpaces(stripEmojis(v.toLowerCase())));
 
-        const members = msg.guild.members;
+        const members = await msg.guild.members.fetch();
         // Send PMs to everyone not in the list
         for (const [id, m] of members) {
           try {
@@ -92,7 +92,7 @@ export default class Gateways {
           const prev = await prevPromise;
           if (prev || channel.type !== "text") return prev;
           try {
-            const foundMsg = await channel.fetchMessage(messageId);
+            const foundMsg = await channel.messages.fetch(messageId);
             console.log(`Found in ${channel.name}`);
             return foundMsg.reactions;
           } catch {}
@@ -102,13 +102,13 @@ export default class Gateways {
         // Get and merge collection of users who have reacted
         const reactedUsersColl = await messageReactions.reduce(async (accUsersCollPromise, messageReaction) => {
           const accUsersColl = await accUsersCollPromise;
-          const users = await messageReaction.fetchUsers();
+          const users = await messageReaction.users.fetch();
           if (accUsersColl) return accUsersColl.concat(users);
           return users;
         }, null);
 
         // Send PMs to everyone who hasn't reacted
-        const members = msg.guild.members;
+        const members = await msg.guild.members.fetch();
         for (const [id, m] of members) {
           try {
             if (!m.user || m.user.bot) continue;
@@ -134,13 +134,13 @@ export default class Gateways {
         let verifiedCount = 0
         let unverifiedCount = 0
         // Go through all users 
-        const members = msg.guild.members;
+        const members = await msg.guild.members.fetch();
         for (const [id, m] of members) {
           try {
             // If they haven't verified send message
             if (!m.user || m.user.bot) continue;
             const username = m.user.username;
-            const isVerified = m.roles.some(role => role.id === '651635493452251146') // specific role id to check for
+            const isVerified = m.cache.roles.cache.some(role => role.id === '651635493452251146') // specific role id to check for
             if (!isVerified) {
               unverifiedCount++
               await m.send(getMessage(username));
