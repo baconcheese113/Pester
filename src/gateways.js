@@ -88,13 +88,13 @@ export default class Gateways {
         const messageId = msg.content.split("!burp whodidntreact ")[1];
 
         // Find message from Id
-        const messageReactions = await msg.guild.channels.reduce(async (prevPromise, channel) => {
+        const messageReactions = await msg.guild.channels.cache.reduce(async (prevPromise, channel) => {
           const prev = await prevPromise;
           if (prev || channel.type !== "text") return prev;
           try {
             const foundMsg = await channel.messages.fetch(messageId);
             console.log(`Found in ${channel.name}`);
-            return foundMsg.reactions;
+            return foundMsg.reactions.cache;
           } catch {}
           return;
         }, null);
