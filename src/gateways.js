@@ -140,7 +140,7 @@ export default class Gateways {
             // If they haven't verified send message
             if (!m.user || m.user.bot) continue;
             const username = m.user.username;
-            const isVerified = m.cache.roles.cache.some(role => role.id === '651635493452251146') // specific role id to check for
+            const isVerified = m.roles.cache.some(role => role.id === '651635493452251146') // specific role id to check for
             if (!isVerified) {
               unverifiedCount++
               await m.send(getMessage(username));
